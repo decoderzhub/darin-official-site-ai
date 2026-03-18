@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Darin Manley — Founder · Builder · Green Beret</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #080808;
+      --bg-card:    #0f0f0f;
+      --bg-card2:   #141414;
+      --gold:       #C8972A;
+      --gold-light: #E5B84A;
+      --gold-dim:   rgba(200, 151, 42, 0.12);
+      --gold-border:rgba(200, 151, 42, 0.22);
+      --text:       #FFFFFF;
+      --text-muted: #7A7A7A;
+      --text-dim:   #AAAAAA;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 3rem;
+      border-bottom: 1px solid var(--gold-border);
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+    }
+
+    .nav-logo span { color: var(--text-muted); font-weight: 300; }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 7rem 3rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      gap: 4rem;
+    }
+
+    .hero-glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(200,151,42,0.06) 0%, transparent 70%);
+      top: 30%; right: 15%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-content { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--gold);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.15s;
+    }
+
+    .hero-name {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.3s;
+    }
+
+    .hero-titles {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.45s;
+    }
+
+    .hero-title-item {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-bio {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.6s;
+    }
+
+    .hero-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.75s;
+    }
+
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .hero-meta-value {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .hero-meta-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-photo-col {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards 0.5s;
+    }
+
+    .hero-photo-frame {
+      position: relative;
+      width: 320px;
+      height: 320px;
+    }
+
+    .hex-portrait {
+      width: 320px;
+      height: 320px;
+    }
+
+    /* ── SECTION STANDARD ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 400;
+      color: var(--gold);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--gold-border);
+    }
+
+    /* ── BUILDING CARDS ── */
+    .building-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .building-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      padding: 1.75rem;
+      position: relative;
+      transition: border-color 0.25s, transform 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .building-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+
+    .building-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 0;
+      background: var(--gold);
+      transition: height 0.3s;
+    }
+
+    .building-card:hover::before { height: 100%; }
+
+    .card-status {
+      display: inline-block;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.58rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.18rem 0.55rem;
+      border: 1px solid;
+      margin-bottom: 1rem;
+    }
+
+    .card-status.live {
+      color: #4ade80;
+      border-color: rgba(74, 222, 128, 0.4);
+      background: rgba(74, 222, 128, 0.05);
+    }
+
+    .card-status.dev {
+      color: var(--gold);
+      border-color: var(--gold-border);
+      background: var(--gold-dim);
+    }
+
+    .card-name {
+      font-family: 'Cinzel', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .card-role {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.85rem;
+    }
+
+    .card-desc {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .card-url {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── EXPERIENCE ── */
+    .experience-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 2rem;
+      padding: 2rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .exp-item:last-child { border-bottom: none; }
+
+    .exp-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      padding-top: 0.15rem;
+      line-height: 1.5;
+    }
+
+    .exp-right {}
+
+    .exp-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      color: var(--text);
+    }
+
+    .exp-org {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--gold);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .exp-bullets li {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+      line-height: 1.55;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .exp-bullets li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+    }
+
+    /* ── STACK ── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .stack-group {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      padding: 1.5rem;
+    }
+
+    .stack-group-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .stack-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 0.2rem 0.55rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── CERTS / EDUCATION ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .edu-card {
+      background: var(--bg-card);
+      border: 1px solid var(--gold-border);
+      padding: 1.75rem;
+    }
+
+    .edu-card-title {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .edu-item {
+      margin-bottom: 1.25rem;
+    }
+
+    .edu-item:last-child { margin-bottom: 0; }
+
+    .edu-name {
+      font-family: 'Cinzel', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .edu-detail {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .edu-year {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--text-muted);
+    }
+
+    .cert-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .cert-tag {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--gold);
+      border: 1px solid var(--gold-border);
+      background: var(--gold-dim);
+      padding: 0.2rem 0.55rem;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── GLOBAL PERSPECTIVE ── */
+    .perspective-block {
+      border: 1px solid var(--gold-border);
+      background: var(--bg-card);
+      padding: 2.5rem;
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+    }
+
+    .perspective-block strong { color: var(--text); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-border) 30%, var(--gold-border) 70%, transparent);
+      margin: 0 3rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--gold-border);
+      padding: 1.75rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-copy {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 6rem;
+      }
+      .hero-photo-col { display: none; }
+      .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .edu-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .section { padding: 3.5rem 1.5rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="https://official-site.ai" class="nav-logo">
+      Darin Manley <span>· official-site.ai</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#building">Building</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="https://official-site.ai">official-site.ai</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div style="max-width:1200px;margin:0 auto;position:relative;z-index:1;">
+    <div class="hero">
+      <div class="hero-glow"></div>
+
+      <div class="hero-content">
+        <p class="hero-eyebrow">Founder · Solution Architect · Builder</p>
+        <h1 class="hero-name">Darin<br/>Manley</h1>
+        <div class="hero-titles">
+          <span class="hero-title-item">Security Solutions Architect</span>
+          <span class="hero-title-item">AI Infrastructure &amp; Agentic Systems</span>
+          <span class="hero-title-item">Green Beret Veteran — Retired</span>
+        </div>
+        <p class="hero-bio">
+          20+ years at the intersection of military operations, cybersecurity, and software engineering.
+          Built from the ground up — from Special Forces cyber operations to demonstrating augmented reality 
+          to Mark Zuckerberg. Now deploying that same edge into AI-first ventures.
+        </p>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-value">20+</span>
+            <span class="hero-meta-label">Years Experience</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-value">3</span>
+            <span class="hero-meta-label">Active Ventures</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-value">SF</span>
+            <span class="hero-meta-label">Green Beret · 1st SFG</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-photo-col">
+        <!-- Geometric portrait frame using SVG -->
+        <svg class="hex-portrait" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <clipPath id="hexClip">
+              <polygon points="160,12 296,88 296,232 160,308 24,232 24,88"/>
+            </clipPath>
+            <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#C8972A" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="#C8972A" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <!-- Outer glow ring -->
+          <circle cx="160" cy="160" r="155" fill="url(#glowGrad)"/>
+          <!-- Hexagon border -->
+          <polygon points="160,10 298,87 298,233 160,310 22,233 22,87" 
+                   fill="none" stroke="#C8972A" stroke-width="1" opacity="0.5"/>
+          <!-- Inner hex (photo placeholder) -->
+          <polygon points="160,30 278,97 278,223 160,290 42,223 42,97"
+                   fill="#111111" clip-path="url(#hexClip)"/>
+          <!-- Photo placeholder initials -->
+          <text x="160" y="148" text-anchor="middle" 
+                font-family="'Cinzel', serif" font-size="52" fill="#C8972A" font-weight="700" opacity="0.6">DM</text>
+          <text x="160" y="182" text-anchor="middle" 
+                font-family="'IBM Plex Mono', monospace" font-size="10" fill="#7A7A7A" letter-spacing="3">HERNANDO BEACH · FL</text>
+          <!-- Corner accents -->
+          <line x1="160" y1="10" x2="160" y2="30" stroke="#C8972A" stroke-width="2"/>
+          <line x1="298" y1="87" x2="278" y2="97" stroke="#C8972A" stroke-width="2"/>
+          <line x1="298" y1="233" x2="278" y2="223" stroke="#C8972A" stroke-width="2"/>
+          <line x1="160" y1="310" x2="160" y2="290" stroke="#C8972A" stroke-width="2"/>
+          <line x1="22" y1="233" x2="42" y2="223" stroke="#C8972A" stroke-width="2"/>
+          <line x1="22" y1="87" x2="42" y2="97" stroke="#C8972A" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CURRENTLY BUILDING -->
+  <section class="section" id="building">
+    <p class="section-label">Currently Building</p>
+    <div class="building-grid">
+
+      <a class="building-card" href="https://redclaw.official-site.ai">
+        <div class="card-status live">Live</div>
+        <h2 class="card-name">RedClaw</h2>
+        <p class="card-role">Founder / Architect</p>
+        <p class="card-desc">
+          OpenClaw-as-a-Service. One-click managed AI agent deployments on dedicated Hetzner 
+          infrastructure with Proxmox/LXC container tiers, automated Stripe provisioning, 
+          and encrypted mesh networking.
+        </p>
+        <span class="card-url">redclaw.official-site.ai</span>
+      </a>
+
+      <a class="building-card" href="https://ai4claims.official-site.ai">
+        <div class="card-status dev">In Dev</div>
+        <h2 class="card-name">AI4Claims</h2>
+        <p class="card-role">Founder / Technical Lead</p>
+        <p class="card-desc">
+          AI-powered veterans disability claims advisory and processing platform. Trained on 
+          VA regulations, medical evidence frameworks, and case precedent — built by a 
+          veteran, for veterans.
+        </p>
+        <span class="card-url">ai4claims.official-site.ai</span>
+      </a>
+
+      <a class="building-card" href="https://gtp.official-site.ai">
+        <div class="card-status live">Live</div>
+        <h2 class="card-name">Global Trust Protocol</h2>
+        <p class="card-role">Co-Founder / Technical Architect</p>
+        <p class="card-desc">
+          Gold-backed autonomous financial operations platform targeting African corridor SMB markets. 
+          Multi-agent architecture with sovereign liquidity design and Ghana mineral reserve partnerships.
+        </p>
+        <span class="card-url">gtp.official-site.ai</span>
+      </a>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EXPERIENCE -->
+  <section class="section" id="experience">
+    <p class="section-label">Experience</p>
+    <div class="experience-list">
+
+      <div class="exp-item">
+        <div class="exp-date">Mar 2023 — Present</div>
+        <div class="exp-right">
+          <h3 class="exp-title">Sr. Security Solutions Architect</h3>
+          <p class="exp-org">Ensono · Full-time · Remote</p>
+          <ul class="exp-bullets">
+            <li>Delivering innovative security architecture solutions for Ensono's enterprise client portfolio across hybrid IT environments</li>
+            <li>Mainframe governance, risk management, and compliance (GRC) advisory across financial sector clients</li>
+            <li>Mentoring and coordinating cross-functional teams of developers and engineers</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Apr 2024 — Jan 2025</div>
+        <div class="exp-right">
+          <h3 class="exp-title">Sr. Solutions Architect</h3>
+          <p class="exp-org">CAST · Full-time · New York, Remote</p>
+          <ul class="exp-bullets">
+            <li>Solutions architecture across .NET Framework, JavaScript, and application modernization workloads</li>
+            <li>Supported enterprise clients transitioning legacy systems to modern cloud-native architectures</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Apr 2021 — Jun 2023</div>
+        <div class="exp-right">
+          <h3 class="exp-title">Special Forces | Director of Cyber Offensive Operations | Red Team</h3>
+          <p class="exp-org">1st Special Forces Group (Airborne) · US Army · JBLM</p>
+          <ul class="exp-bullets">
+            <li>Created the 1st Special Forces Group Cyber Operations Lab — training personnel on defensive and offensive cyber techniques</li>
+            <li>Led Red Team operations across critical national security environments</li>
+            <li>Developed augmented reality training system presented to Facebook CEO Mark Zuckerberg</li>
+            <li>Pioneered future technology development for Special Warfare School modernization</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="exp-item">
+        <div class="exp-date">Mar 2023 — Jun 2023</div>
+        <div class="exp-right">
+          <h3 class="exp-title">Sr. Cybersecurity Engineer</h3>
+          <p class="exp-org">FreshCredit Inc · Remote · Bellevue, WA</p>
+          <ul class="exp-bullets">
+            <li>Advisor and Senior Cybersecurity Engineer for fintech platform security architecture</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- TECHNICAL STACK -->
+  <section class="section" id="stack">
+    <p class="section-label">Technical Stack</p>
+    <div class="stack-grid">
+      <div class="stack-group">
+        <p class="stack-group-title">AI / Agentic</p>
+        <div class="stack-tags">
+          <span class="stack-tag">Claude API</span>
+          <span class="stack-tag">OpenClaw</span>
+          <span class="stack-tag">FastAPI</span>
+          <span class="stack-tag">Python</span>
+          <span class="stack-tag">LLM Orchestration</span>
+          <span class="stack-tag">Multi-Agent Systems</span>
+          <span class="stack-tag">Ollama</span>
+          <span class="stack-tag">LiteLLM</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <p class="stack-group-title">Frontend</p>
+        <div class="stack-tags">
+          <span class="stack-tag">React</span>
+          <span class="stack-tag">React Native</span>
+          <span class="stack-tag">Next.js</span>
+          <span class="stack-tag">TypeScript</span>
+          <span class="stack-tag">Expo</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <p class="stack-group-title">Infrastructure</p>
+        <div class="stack-tags">
+          <span class="stack-tag">Hetzner</span>
+          <span class="stack-tag">Proxmox</span>
+          <span class="stack-tag">Docker</span>
+          <span class="stack-tag">Portainer</span>
+          <span class="stack-tag">LXC</span>
+          <span class="stack-tag">Tailscale</span>
+          <span class="stack-tag">Cloudflare</span>
+          <span class="stack-tag">Vercel</span>
+        </div>
+      </div>
+      <div class="stack-group">
+        <p class="stack-group-title">Security</p>
+        <div class="stack-tags">
+          <span class="stack-tag">GIAC GISP</span>
+          <span class="stack-tag">CompTIA Sec+</span>
+          <span class="stack-tag">GRC</span>
+          <span class="stack-tag">Red Team</span>
+          <span class="stack-tag">CMMC</span>
+          <span class="stack-tag">Clearance</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- EDUCATION & CERTS -->
+  <section class="section" id="education">
+    <p class="section-label">Education &amp; Certifications</p>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <p class="edu-card-title">Education</p>
+        <div class="edu-item">
+          <p class="edu-name">Excelsior University</p>
+          <p class="edu-detail">Master of Science — Cyber/Computer Forensics &amp; Counterterrorism</p>
+          <p class="edu-year">2020 – 2024</p>
+        </div>
+        <div class="edu-item">
+          <p class="edu-name">Excelsior University</p>
+          <p class="edu-detail">Bachelor of Applied Science — Liberal Arts &amp; Sciences</p>
+          <p class="edu-year">2019 – 2020</p>
+        </div>
+      </div>
+      <div class="edu-card">
+        <p class="edu-card-title">Certifications</p>
+        <div class="cert-tags">
+          <span class="cert-tag">GIAC GISP</span>
+          <span class="cert-tag">CompTIA Security+</span>
+          <span class="cert-tag">PADI Advanced OW</span>
+        </div>
+        <br/>
+        <p class="edu-card-title" style="margin-top:1rem;">Languages</p>
+        <div class="cert-tags">
+          <span class="cert-tag">English — Native</span>
+          <span class="cert-tag">Korean — Working</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- GLOBAL PERSPECTIVE -->
+  <section class="section">
+    <p class="section-label">Global Perspective</p>
+    <div class="perspective-block">
+      Stationed across <strong>Korea</strong>, <strong>Okinawa</strong>, <strong>JBLM</strong>, and multiple forward operating environments throughout a 20-year military career. 
+      Deployed across <strong>30+ countries</strong> in Europe, Asia, and the Pacific. 
+      That operational breadth — and the ability to move with precision in high-stakes environments — 
+      informs every technical and strategic decision made in building these ventures.
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-copy">© 2026 DARIN MANLEY · official-site.ai · <span style="color:var(--gold);">This is a living document. Last updated March 2026.</span></span>
+    <ul class="footer-links">
+      <li><a href="https://official-site.ai">official-site.ai</a></li>
+      <li><a href="https://redclaw.official-site.ai">RedClaw</a></li>
+      <li><a href="https://www.linkedin.com/in/djmanley85" target="_blank">LinkedIn</a></li>
+      <li><a href="mailto:darin@official-site.ai">Email</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
